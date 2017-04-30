@@ -1,5 +1,6 @@
 *.swp
 aws-credentials
+access_key.pub
 .terraform/
 terraform.tfstate
 terraform.tfstate.backup
