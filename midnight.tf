@@ -37,7 +37,7 @@ resource "aws_security_group" "allow-global-ssh" {
 
 resource "aws_instance" "midnight-hub-west" {
   provider               = aws.oregon
-  ami                    = "ami-efd0428f"
+  ami                    = "ami-003634241a8fcdec0"
   instance_type          = "t2.micro"
   key_name               = aws_key_pair.admin-key-oregon.key_name
   vpc_security_group_ids = [aws_security_group.allow-global-ssh.id]
@@ -99,7 +99,7 @@ resource "aws_security_group" "allow-west-telnet" {
 
 resource "aws_instance" "midnight-hub-south" {
   provider               = aws.saopaolo
-  ami                    = "ami-4090f22c"
+  ami                    = "ami-077d5d3682940b34a"
   instance_type          = "t2.micro"
   key_name               = aws_key_pair.admin-key-saopaolo.key_name
   vpc_security_group_ids = [aws_security_group.allow-west-telnet.id]
@@ -153,7 +153,7 @@ resource "aws_security_group" "allow-south-all" {
 
 resource "aws_instance" "midnight-hub-core" {
   provider               = aws.seoul
-  ami                    = "ami-66e33108"
+  ami                    = "ami-00edfb46b107f643c"
   instance_type          = "t2.micro"
   key_name               = aws_key_pair.admin-key-seoul.key_name
   vpc_security_group_ids = [aws_security_group.allow-south-all.id]
@@ -166,4 +166,19 @@ resource "aws_eip" "midnight-hub-core" {
   provider = aws.seoul
   instance = aws_instance.midnight-hub-core.id
   vpc      = true
+}
+
+output "midnight-hub-west-ip" {
+  value = aws_eip.midnight-hub-west.public_ip
+  description = "midnight-hub-west IP address"
+}
+
+output "midnight-hub-south-ip" {
+  value = aws_eip.midnight-hub-south.public_ip
+  description = "midnight-hub-south IP address"
+}
+
+output "midnight-hub-core-ip" {
+  value = aws_eip.midnight-hub-core.public_ip
+  description = "midnight-hub-core IP address"
 }
