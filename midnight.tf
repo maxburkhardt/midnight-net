@@ -6,16 +6,17 @@ provider "aws" {
   shared_credentials_file = "./aws-credentials"
   region                  = "us-west-2"
   alias                   = "oregon"
+  version                 = "~> 2.66"
 }
 
 resource "aws_key_pair" "admin-key-oregon" {
-  provider   = "aws.oregon"
+  provider   = aws.oregon
   key_name   = "midnight-admin-key"
-  public_key = "${file("./access_key.pub")}"
+  public_key = file("./access_key.pub")
 }
 
 resource "aws_security_group" "allow-global-ssh" {
-  provider    = "aws.oregon"
+  provider    = aws.oregon
   name        = "allow-global-ssh"
   description = "allow tcp/22 from everywhere"
 
@@ -35,19 +36,19 @@ resource "aws_security_group" "allow-global-ssh" {
 }
 
 resource "aws_instance" "midnight-hub-west" {
-  provider               = "aws.oregon"
+  provider               = aws.oregon
   ami                    = "ami-efd0428f"
   instance_type          = "t2.micro"
-  key_name               = "${aws_key_pair.admin-key-oregon.key_name}"
-  vpc_security_group_ids = ["${aws_security_group.allow-global-ssh.id}"]
-  tags {
+  key_name               = aws_key_pair.admin-key-oregon.key_name
+  vpc_security_group_ids = [aws_security_group.allow-global-ssh.id]
+  tags = {
     Name = "midnight-hub-west"
   }
 }
 
 resource "aws_eip" "midnight-hub-west" {
-  provider = "aws.oregon"
-  instance = "${aws_instance.midnight-hub-west.id}"
+  provider = aws.oregon
+  instance = aws_instance.midnight-hub-west.id
   vpc      = true
 }
 
@@ -59,16 +60,17 @@ provider "aws" {
   shared_credentials_file = "./aws-credentials"
   region                  = "sa-east-1"
   alias                   = "saopaolo"
+  version                 = "~> 2.66"
 }
 
 resource "aws_key_pair" "admin-key-saopaolo" {
-  provider   = "aws.saopaolo"
+  provider   = aws.saopaolo
   key_name   = "midnight-admin-key"
-  public_key = "${file("./access_key.pub")}"
+  public_key = file("./access_key.pub")
 }
 
 resource "aws_security_group" "allow-west-telnet" {
-  provider    = "aws.saopaolo"
+  provider    = aws.saopaolo
   name        = "allow-west-telnet"
   description = "allow tcp/23 from midnight-west"
 
@@ -96,19 +98,19 @@ resource "aws_security_group" "allow-west-telnet" {
 }
 
 resource "aws_instance" "midnight-hub-south" {
-  provider               = "aws.saopaolo"
+  provider               = aws.saopaolo
   ami                    = "ami-4090f22c"
   instance_type          = "t2.micro"
-  key_name               = "${aws_key_pair.admin-key-saopaolo.key_name}"
-  vpc_security_group_ids = ["${aws_security_group.allow-west-telnet.id}"]
-  tags {
+  key_name               = aws_key_pair.admin-key-saopaolo.key_name
+  vpc_security_group_ids = [aws_security_group.allow-west-telnet.id]
+  tags = {
     Name = "midnight-hub-south"
   }
 }
 
 resource "aws_eip" "midnight-hub-south" {
-  provider = "aws.saopaolo"
-  instance = "${aws_instance.midnight-hub-south.id}"
+  provider = aws.saopaolo
+  instance = aws_instance.midnight-hub-south.id
   vpc      = true
 }
 
@@ -120,16 +122,17 @@ provider "aws" {
   shared_credentials_file = "./aws-credentials"
   region                  = "ap-northeast-2"
   alias                   = "seoul"
+  version                 = "~> 2.66"
 }
 
 resource "aws_key_pair" "admin-key-seoul" {
-  provider   = "aws.seoul"
+  provider   = aws.seoul
   key_name   = "midnight-admin-key"
-  public_key = "${file("./access_key.pub")}"
+  public_key = file("./access_key.pub")
 }
 
 resource "aws_security_group" "allow-south-all" {
-  provider    = "aws.seoul"
+  provider    = aws.seoul
   name        = "allow-south-all"
   description = "allow all traffic from the midnight south hub"
 
@@ -149,18 +152,18 @@ resource "aws_security_group" "allow-south-all" {
 }
 
 resource "aws_instance" "midnight-hub-core" {
-  provider               = "aws.seoul"
+  provider               = aws.seoul
   ami                    = "ami-66e33108"
   instance_type          = "t2.micro"
-  key_name               = "${aws_key_pair.admin-key-seoul.key_name}"
-  vpc_security_group_ids = ["${aws_security_group.allow-south-all.id}"]
-  tags {
+  key_name               = aws_key_pair.admin-key-seoul.key_name
+  vpc_security_group_ids = [aws_security_group.allow-south-all.id]
+  tags = {
     Name = "midnight-hub-core"
   }
 }
 
 resource "aws_eip" "midnight-hub-core" {
-  provider = "aws.seoul"
-  instance = "${aws_instance.midnight-hub-core.id}"
+  provider = aws.seoul
+  instance = aws_instance.midnight-hub-core.id
   vpc      = true
 }
