@@ -1,0 +1,58 @@
+---
+- hosts: hub-west
+  remote_user: ubuntu
+  become: yes
+  tasks:
+    - name: Install MOTD
+      copy:
+        src: resources/motd.txt
+        dest: /etc/motd
+        owner: root
+        group: root
+        mode: '0644'
+    - name: Install nmap
+      apt:
+        name: nmap
+        state: present
+        update_cache: yes
+    - name: Install midnight IPs file
+      copy:
+        src: resources/midnight_ips.txt
+        dest: /home/ubuntu/midnight_ips.txt
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+- hosts: hub-south
+  remote_user: ubuntu
+  become: yes
+  tasks:
+    - name: Install MOTD
+      copy:
+        src: resources/messwith_motd.txt
+        dest: /etc/motd
+        owner: root
+        group: root
+        mode: '0644'
+    - name: Install telnet
+      apt:
+        name: telnetd
+        state: present
+        update_cache: yes
+    - name: Create user
+      user:
+        name: toor
+        comment: Toor User
+        group: sudo
+        # Created with mkpassword --method=sha-512. Cleartext is "zxcvbnm"
+        password: "$6$DsEhGC.UVk$rtICpUQQ8m8tG.jxRhGyA9jsnwI9F4g1pBz8uLKbv.Pk7q/Itni.gqvwsoX6IXv3/Y.ndB13STJn7uWmcuDcv/"
+- hosts: hub-core
+  remote_user: ubuntu
+  become: yes
+  tasks:
+    - name: Install MOTD
+      copy:
+        src: resources/evil_motd.txt
+        dest: /etc/motd
+        owner: root
+        group: root
+        mode: '0644'
