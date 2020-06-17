@@ -15,10 +15,10 @@ resource "aws_key_pair" "admin-key-oregon" {
   public_key = file("./access_key.pub")
 }
 
-resource "aws_security_group" "allow-global-ssh" {
+resource "aws_security_group" "midnight-west" {
   provider    = aws.oregon
-  name        = "allow-global-ssh"
-  description = "allow tcp/22 from everywhere"
+  name        = "midnight-west"
+  description = "midnight west security group (allow 22 from anywhere)"
 
   ingress {
     from_port   = 22
@@ -40,7 +40,7 @@ resource "aws_instance" "midnight-hub-west" {
   ami                    = "ami-003634241a8fcdec0"
   instance_type          = "t2.micro"
   key_name               = aws_key_pair.admin-key-oregon.key_name
-  vpc_security_group_ids = [aws_security_group.allow-global-ssh.id]
+  vpc_security_group_ids = [aws_security_group.midnight-west.id]
   tags = {
     Name = "midnight-hub-west"
   }
@@ -69,16 +69,23 @@ resource "aws_key_pair" "admin-key-saopaolo" {
   public_key = file("./access_key.pub")
 }
 
-resource "aws_security_group" "allow-west-telnet" {
+resource "aws_security_group" "midnight-south" {
   provider    = aws.saopaolo
-  name        = "allow-west-telnet"
-  description = "allow tcp/23 from midnight-west"
+  name        = "midnight-south"
+  description = "allow tcp/23 from midnight-west and ssh from controller"
 
   ingress {
     from_port   = 23
     to_port     = 23
     protocol    = "tcp"
     cidr_blocks = ["${aws_eip.midnight-hub-west.public_ip}/32"]
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["${chomp(file("./controller_ip"))}/32"]
   }
 
   # Also allow ping so that nmap doesn't require -Pn
@@ -102,7 +109,7 @@ resource "aws_instance" "midnight-hub-south" {
   ami                    = "ami-077d5d3682940b34a"
   instance_type          = "t2.micro"
   key_name               = aws_key_pair.admin-key-saopaolo.key_name
-  vpc_security_group_ids = [aws_security_group.allow-west-telnet.id]
+  vpc_security_group_ids = [aws_security_group.midnight-south.id]
   tags = {
     Name = "midnight-hub-south"
   }
@@ -131,9 +138,9 @@ resource "aws_key_pair" "admin-key-seoul" {
   public_key = file("./access_key.pub")
 }
 
-resource "aws_security_group" "allow-south-all" {
+resource "aws_security_group" "midnight-core" {
   provider    = aws.seoul
-  name        = "allow-south-all"
+  name        = "midnight-core"
   description = "allow all traffic from the midnight south hub"
 
   ingress {
@@ -141,6 +148,13 @@ resource "aws_security_group" "allow-south-all" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["${aws_eip.midnight-hub-south.public_ip}/32"]
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["${chomp(file("./controller_ip"))}/32"]
   }
 
   egress {
@@ -156,7 +170,7 @@ resource "aws_instance" "midnight-hub-core" {
   ami                    = "ami-00edfb46b107f643c"
   instance_type          = "t2.micro"
   key_name               = aws_key_pair.admin-key-seoul.key_name
-  vpc_security_group_ids = [aws_security_group.allow-south-all.id]
+  vpc_security_group_ids = [aws_security_group.midnight-core.id]
   tags = {
     Name = "midnight-hub-core"
   }

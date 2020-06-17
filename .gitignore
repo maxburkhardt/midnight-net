@@ -2,6 +2,7 @@
 aws-credentials
 access_key.pub
 id_rsa
+controller_ip
 .terraform/
 terraform.tfstate
 terraform.tfstate.backup
