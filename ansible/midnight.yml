@@ -56,3 +56,41 @@
         owner: root
         group: root
         mode: '0644'
+    - name: Install xinetd
+      apt:
+        name: xinetd
+        state: present
+        update_cache: yes
+    - name: Create ftp user
+      user:
+        name: ftp
+        comment: ftp user
+    - name: Create chroot dir
+      file:
+        path: /usr/share/empty
+        state: directory
+    - name: Create vsftpd conf
+      copy:
+        src: resources/vsftpd.conf
+        dest: /etc/vsftpd.conf
+        owner: root
+        group: root
+        mode: '0644'
+    - name: Upload vsftpd binary
+      copy:
+        src: resources/vsftpd
+        dest: /usr/local/sbin/vsftpd
+        owner: root
+        group: root
+        mode: '0755'
+    - name: Upload xinetd conf
+      copy:
+        src: resources/xinetd.d-vsftpd
+        dest: /etc/xinetd.d/vsftpd
+        owner: root
+        group: root
+        mode: '0644'
+    - name: Restart xinetd
+      service:
+        name: xinetd
+        state: restarted
