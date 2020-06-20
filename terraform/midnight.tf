@@ -3,7 +3,7 @@
 ###################
 
 provider "aws" {
-  shared_credentials_file = "./aws-credentials"
+  shared_credentials_file = "../credentials/aws-credentials"
   region                  = "us-west-2"
   alias                   = "oregon"
   version                 = "~> 2.66"
@@ -12,7 +12,7 @@ provider "aws" {
 resource "aws_key_pair" "admin-key-oregon" {
   provider   = aws.oregon
   key_name   = "midnight-admin-key"
-  public_key = file("./access_key.pub")
+  public_key = file("../credentials/access_key.pub")
 }
 
 resource "aws_security_group" "midnight-west" {
@@ -57,7 +57,7 @@ resource "aws_eip" "midnight-hub-west" {
 ####################
 
 provider "aws" {
-  shared_credentials_file = "./aws-credentials"
+  shared_credentials_file = "../credentials/aws-credentials"
   region                  = "sa-east-1"
   alias                   = "saopaolo"
   version                 = "~> 2.66"
@@ -66,7 +66,7 @@ provider "aws" {
 resource "aws_key_pair" "admin-key-saopaolo" {
   provider   = aws.saopaolo
   key_name   = "midnight-admin-key"
-  public_key = file("./access_key.pub")
+  public_key = file("../credentials/access_key.pub")
 }
 
 resource "aws_security_group" "midnight-south" {
@@ -85,7 +85,7 @@ resource "aws_security_group" "midnight-south" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${chomp(file("./controller_ip"))}/32"]
+    cidr_blocks = ["${chomp(file("../credentials/controller_ip"))}/32"]
   }
 
   # Also allow ping so that nmap doesn't require -Pn
@@ -126,7 +126,7 @@ resource "aws_eip" "midnight-hub-south" {
 ###################
 
 provider "aws" {
-  shared_credentials_file = "./aws-credentials"
+  shared_credentials_file = "../credentials/aws-credentials"
   region                  = "ap-northeast-2"
   alias                   = "seoul"
   version                 = "~> 2.66"
@@ -135,7 +135,7 @@ provider "aws" {
 resource "aws_key_pair" "admin-key-seoul" {
   provider   = aws.seoul
   key_name   = "midnight-admin-key"
-  public_key = file("./access_key.pub")
+  public_key = file("../credentials/access_key.pub")
 }
 
 resource "aws_security_group" "midnight-core" {
@@ -154,7 +154,7 @@ resource "aws_security_group" "midnight-core" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${chomp(file("./controller_ip"))}/32"]
+    cidr_blocks = ["${chomp(file("../credentials/controller_ip"))}/32"]
   }
 
   egress {
