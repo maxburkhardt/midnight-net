@@ -1,5 +1,5 @@
 ---
-- hosts: hub-west
+- hosts: hub_west
   remote_user: ubuntu
   become: yes
   tasks:
@@ -22,7 +22,7 @@
         owner: ubuntu
         group: ubuntu
         mode: '0644'
-- hosts: hub-south
+- hosts: hub_south
   remote_user: ubuntu
   become: yes
   tasks:
@@ -45,7 +45,7 @@
         group: sudo
         # Created with mkpassword --method=sha-512. Cleartext is "zxcvbnm"
         password: "$6$DsEhGC.UVk$rtICpUQQ8m8tG.jxRhGyA9jsnwI9F4g1pBz8uLKbv.Pk7q/Itni.gqvwsoX6IXv3/Y.ndB13STJn7uWmcuDcv/"
-- hosts: hub-core
+- hosts: hub_core
   remote_user: ubuntu
   become: yes
   tasks:
