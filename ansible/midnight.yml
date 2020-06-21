@@ -10,17 +10,45 @@
         owner: root
         group: root
         mode: '0644'
+    - name: Create user
+      user:
+        name: hacker
+        group: sudo
+        # Created with mkpasswd --method=sha-512. Cleartext is "hackybirthday"
+        password: "$6$eognPI9yeV8CiQ7.$8qMcpIeLXxyNWgkEAaiJeOWVMInnEPExnjd.EimPUC9FnJQJf0Zn599WSY3m6le192LPx6lgYezhM3ib71Sxu0"
+        create_home: yes
+        shell: /bin/bash
+    - name: Configure sshd
+      copy:
+        src: resources/password_sshd_config
+        dest: /etc/ssh/sshd_config
+        owner: root
+        mode: '0644'
+    - name: Restart sshd
+      service:
+        name: ssh
+        state: restarted
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+    - name: Create website
+      copy:
+        src: resources/west_index.html
+        dest: /var/www/html/index.nginx-debian.html
+        owner: root
+        group: root
+        mode: '0644'
     - name: Install nmap
       apt:
         name: nmap
         state: present
-        update_cache: yes
-    - name: Install midnight IPs file
+    - name: Install midnight notes file
       copy:
-        src: resources/midnight_ips.txt
-        dest: /home/ubuntu/midnight_ips.txt
-        owner: ubuntu
-        group: ubuntu
+        src: resources/midnight_notes.txt
+        dest: /home/hacker/midnight_notes.txt
+        owner: hacker
         mode: '0644'
 - hosts: hub_south
   remote_user: ubuntu
@@ -40,11 +68,29 @@
         update_cache: yes
     - name: Create user
       user:
-        name: toor
-        comment: Toor User
+        name: mantic0re
+        comment: MANTIC0RE
         group: sudo
-        # Created with mkpassword --method=sha-512. Cleartext is "zxcvbnm"
+        # Created with mkpasswd --method=sha-512. Cleartext is "zxcvbnm"
         password: "$6$DsEhGC.UVk$rtICpUQQ8m8tG.jxRhGyA9jsnwI9F4g1pBz8uLKbv.Pk7q/Itni.gqvwsoX6IXv3/Y.ndB13STJn7uWmcuDcv/"
+        create_home: yes
+        shell: /bin/bash
+    - name: Create user .ssh dir
+      file:
+        path: /home/mantic0re/.ssh
+        state: directory
+    - name: Create user known_hosts
+      copy:
+        src: resources/south_known_hosts
+        dest: /home/mantic0re/.ssh/known_hosts
+        owner: mantic0re
+        mode: '0600'
+    - name: Upload INSTRUCTIONS file
+      copy:
+        src: resources/INSTRUCTIONS
+        dest: /home/mantic0re/INSTRUCTIONS
+        owner: mantic0re
+        mode: '0644'
 - hosts: hub_core
   remote_user: ubuntu
   become: yes
@@ -56,6 +102,17 @@
         owner: root
         group: root
         mode: '0644'
+    - name: Create gh0stc0re user
+      user:
+        name: gh0stc0re
+        create_home: yes
+    - name: Upload game key
+      copy:
+        src: resources/game_key
+        dest: /home/gh0stc0re/CAT_ME_TO_WIN
+        owner: root
+        group: root
+        mode: '0600'
     - name: Install xinetd
       apt:
         name: xinetd

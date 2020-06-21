@@ -18,11 +18,18 @@ resource "aws_key_pair" "admin-key-oregon" {
 resource "aws_security_group" "midnight-west" {
   provider    = aws.oregon
   name        = "midnight-west"
-  description = "midnight west security group (allow 22 from anywhere)"
+  description = "midnight west security group"
 
   ingress {
     from_port   = 22
     to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -74,9 +81,19 @@ resource "aws_security_group" "midnight-south" {
   name        = "midnight-south"
   description = "allow tcp/23 from midnight-west and ssh from controller"
 
+  # Allow telnet from midnight-west
   ingress {
     from_port   = 23
     to_port     = 23
+    protocol    = "tcp"
+    cidr_blocks = ["${aws_eip.midnight-hub-west.public_ip}/32"]
+  }
+
+  # Allow 80 from midnight-west as well. This isn't used anything, but may be
+  # helpful to the hackers.
+  ingress {
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["${aws_eip.midnight-hub-west.public_ip}/32"]
   }

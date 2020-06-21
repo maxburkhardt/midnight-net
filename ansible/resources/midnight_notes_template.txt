@@ -1,0 +1,18 @@
+OPERATIONAL NOTES ON ATTACKING THE MIDNIGHT NET
+
+These n00bs have been infecting people with their virus-infested warez
+downloads for too long... it's time to take them down and expand our domain in
+the process!
+
+Notes so far:
+
+- They've got a server running somewhere in Brazil that I think they use as a
+  gateway to their network -- our buddy hydr4 was able to figure out that its
+  IP is {{ hub_south_ip }}
+- There's some sort of "core server" that they keep their secrets on... but
+  we'll need to pop this gateway first
+- We know that one of their crew uses the handle "mantic0re"
+
+
+hack the planet!
+

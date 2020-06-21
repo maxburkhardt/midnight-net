@@ -1,4 +1,5 @@
 *.swp
+.DS_Store
 aws-credentials
 access_key.pub
 id_rsa
@@ -8,4 +9,6 @@ terraform.tfstate
 terraform.tfstate.backup
 .terraform.tfstate.lock.info
 inventory.ini
-midnight_ips.txt
+midnight_notes.txt
+south_known_hosts
+game_key

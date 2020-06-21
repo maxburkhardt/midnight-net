@@ -15,6 +15,8 @@ cd terraform
 terraform init
 terraform apply
 cd ../ansible
-./load_ips.py
 ./apply.sh
 ```
+
+Note that `terraform init` is only needed the first time you set up a midnight
+net.
