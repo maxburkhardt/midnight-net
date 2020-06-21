@@ -20,3 +20,7 @@ cd ../ansible
 
 Note that `terraform init` is only needed the first time you set up a midnight
 net.
+
+Once you're done with the environment, cd into the `terraform/` directory, and
+run `terraform destroy`. That will clean up all midnight resources and stop
+incurring AWS bills.
