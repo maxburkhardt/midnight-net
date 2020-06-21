@@ -26,24 +26,29 @@ bunzip2 rockyou.txt.bz2
 sudo nmap -p 23 --script telnet-brute --script-args 'userdb=user.txt,passdb=rockyou.txt' <IPaddr>
 ```
 This will reveal the `mantic0re` user's password. You should now be able to log
-into the "midnight south" host.
+into the "midnight south" host via telnet.
 
 ## Midnight Core
 You can find the IP for this host inside `mantic0re`'s `.ssh/known_hosts` file.
 There's a hint about this in the INSTRUCTIONS file that's in that user's
-homedir. We'll start with a portscan, as usual:
+homedir. When a user SSHes to a host, a record of that host's IP is usually
+left in this file, unless a user has turned on known-host-hashing, which many
+do not do. We'll start with a portscan, as usual:
 ```
 sudo nmap -sS -F -Pn <IPaddr>
 ```
 This reveals two ports open, 21 for `ftp` and 22 for `ssh`. `mantic0re`'s
 credentials don't appear to work here, so let's target the FTP service. We can
-start with a version scan:
+start with a version scan to find out what FTP server this is:
 ```
 sudo nmap -sS -sV -p 21 <IPaddr>
 ```
-This reveals that this is vsftpd 2.3.4. Some quick googling indicates that this
+This reveals that this is vsftpd 2.3.4. Some googling indicates that this
 version of vsftpd was actually backdoored, and there's a script to exploit it
 built into nmap. We can exploit this host with:
 ```
 sudo nmap --script ftp-vsftpd-backdoor --script-args 'ftp-vsftpd-backdoor.cmd="ls /"' -p 21 <IPaddr>
 ```
+By modifying the `ftp-vsftpd-backdoor.cmd` value, we can run new commands on
+the "core" server, until we find the secret that `mantic0re`'s co-hacker has
+left behind.
