@@ -4,7 +4,11 @@ This repo contains tools to automatically set up a practice hacking
 environment. It was originally designed for educational hackathons.
 
 ## Quick Start
-First, create credentials in `credentials/` as per the sample files. For each
+First, you'll need [Terraform](https://www.terraform.io/downloads.html) and
+[Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
+Install those before proceeding. You'll also need a Python 3 runtime.
+
+Second, create credentials in `credentials/` as per the sample files. For each
 sample file, you will need to create a real version without the `.sample`
 prefix. For instance, you will need to create an `aws-credentials` file with
 actual, working AWS credentials.
