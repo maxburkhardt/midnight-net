@@ -1,7 +1,9 @@
 # midnight-net
 
 This repo contains tools to automatically set up a practice hacking
-environment. It was originally designed for educational hackathons.
+environment. It was originally designed for educational hackathons. The goal of
+the Midnight Net is to provide a challenge that is based as much as possible in
+how real systems are compromised.
 
 ## Quick Start
 First, you'll need [Terraform](https://www.terraform.io/downloads.html) and

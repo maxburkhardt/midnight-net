@@ -52,3 +52,11 @@ sudo nmap --script ftp-vsftpd-backdoor --script-args 'ftp-vsftpd-backdoor.cmd="l
 By modifying the `ftp-vsftpd-backdoor.cmd` value, we can run new commands on
 the "core" server, until we find the secret that `mantic0re`'s co-hacker has
 left behind.
+
+# Congratulations!
+By completing this challenge, you have:
+
+* Used realistic strategies to compromise machines (credential leakage,
+  credential brute-forcing, and vulnerable version exploitation)
+* Literally hacked the planet (by pwning hosts in the USA, Brazil, and South
+  Korea)
