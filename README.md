@@ -12,7 +12,7 @@ Install those before proceeding. You'll also need a Python 3 runtime.
 
 Second, create credentials in `credentials/` as per the sample files. For each
 sample file, you will need to create a real version without the `.sample`
-prefix. For instance, you will need to create an `aws-credentials` file with
+suffix. For instance, you will need to create an `aws-credentials` file with
 actual, working AWS credentials.
 
 Then, run the following sequence of commands:
